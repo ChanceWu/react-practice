@@ -6,9 +6,12 @@ import React, { Component } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import Index from '../components/home/Index';
 import Form from '../components/forms/Form';
+
+import AdminHome from '../components/admin/AdminHome';
 // import AuthBasic from '../components/auth/Basic';
 // import RouterEnter from '../components/auth/RouterEnter';
 // import Cssmodule from '../components/cssmodule';
+
 
 
 export default class CRouter extends Component {
@@ -24,6 +27,8 @@ export default class CRouter extends Component {
             <Switch>
                 <Route exact path="/app/home/index" component={Index} />
                 <Route exact path="/app/form/Form" component={Form} />
+
+                <Route component={AdminHome} path='/app/admin/adminHome' />
                 
                 {/*<Route exact path="/app/auth/basic" component={AuthBasic} />
                 <Route exact path="/app/auth/routerEnter" component={(props) => this.requireAuth('auth/testPage', <RouterEnter {...props} />)} />

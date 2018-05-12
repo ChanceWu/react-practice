@@ -2,7 +2,7 @@
  * Created by hao.cheng on 2017/4/16.
  */
 import React from 'react';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchData, receiveData } from '@/action';
@@ -18,8 +18,14 @@ class Login extends React.Component {
         const { auth: nextAuth = {} } = nextProps;
         const { history } = this.props;
         if (nextAuth.data && nextAuth.data.uid) {   // 判断是否登陆
-            localStorage.setItem('user', JSON.stringify(nextAuth.data));
-            history.push('/');
+            console.log(nextAuth.data);
+            if(nextAuth.data.uid == 1){
+                localStorage.setItem('user', JSON.stringify(nextAuth.data));
+                history.push('/app/admin/adminHome');
+            }else{
+                localStorage.setItem('user', JSON.stringify(nextAuth.data));
+                history.push('/');
+            } 
         }
     }
     handleSubmit = (e) => {
@@ -28,8 +34,14 @@ class Login extends React.Component {
             if (!err) {
                 console.log('Received values of form: ', values);
                 const { fetchData } = this.props;
-                if (values.userName === 'admin' && values.password === 'admin') fetchData({funcName: 'admin', stateName: 'auth'});
-                if (values.userName === 'guest' && values.password === 'guest') fetchData({funcName: 'guest', stateName: 'auth'});
+                if (values.userName === 'admin' && values.password === 'admin'){
+                    fetchData({funcName: 'admin', stateName: 'auth'});
+                    message.success("管理员登录成功");
+                }
+                if (values.userName === 'guest' && values.password === 'guest'){
+                    fetchData({funcName: 'guest', stateName: 'auth'});
+                    message.success("用户登录成功");
+                }
             }
         });
     };

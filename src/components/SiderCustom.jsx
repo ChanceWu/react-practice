@@ -4,10 +4,16 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
 import { withRouter } from 'react-router-dom';
-import { menus } from '../constants/menus';
+import { connect } from 'react-redux';
+import { menus, menusAdmin } from '../constants/menus';
 import SiderMenu from './SiderMenu';
 
 const { Sider } = Layout;
+
+const mapStateToProps = state => {
+    const { auth = {data: {}} } = state.httpData;
+    return { auth };
+};
 
 class SiderCustom extends Component {
     state = {
@@ -16,8 +22,21 @@ class SiderCustom extends Component {
         openKey: '',
         selectedKey: '',
         firstHide: true,        // 点击收缩菜单，第一次隐藏展开子菜单，openMenu时恢复
+        menusSider: [],
     };
     componentDidMount() {
+        console.log('this.props.auth.data');
+        console.log(this.props.auth.data);
+        if(this.props.auth.data&&this.props.auth.data.uid==1){
+            this.setState({
+                menusSider: menusAdmin,
+            });
+        }else{
+            this.setState({
+                menusSider: menus,
+            });
+        }
+        
         this.setMenuOpen(this.props);
     }
     componentWillReceiveProps(nextProps) {
@@ -65,7 +84,7 @@ class SiderCustom extends Component {
             >
                 <div className="logo" />
                 <SiderMenu
-                    menus={menus}
+                    menus={this.state.menusSider}
                     onClick={this.menuClick}
                     theme="dark"
                     mode="inline"
@@ -86,4 +105,4 @@ class SiderCustom extends Component {
     }
 }
 
-export default withRouter(SiderCustom);
+export default withRouter(connect(mapStateToProps)(SiderCustom));
